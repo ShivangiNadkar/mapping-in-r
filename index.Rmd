@@ -12,4 +12,4 @@ library(ggthemes)
 library(tigris)
 ```
 
-My name is Shivangi Nadkar and I am completing the Mapping Tutorial in order to create a map to upload to GitHub.
+My name is Shivangi Nadkar and I am completing the Mapping Tutorial in order to create maps to upload to GitHub.

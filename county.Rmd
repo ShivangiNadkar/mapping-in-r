@@ -1,0 +1,51 @@
+---
+title: "Faceting Map"
+output: html_document
+date: '2022-06-30'
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library(tidyverse)
+library(tidycensus)
+library(ggthemes)
+library(tigris)
+```
+
+```{r}
+echo = FALSE
+racevars <- load_variables(2018, "acs5") |> filter(concept == "RACE")
+```
+
+```{r}
+echo = FALSE
+
+county <- get_acs(geography = "tract",
+        variables = c(2018, "acs5", "B03003_003", "B02001_002",
+                                    "B02001_005", "B02001_004"),
+        year = 2018,
+        state = "Massachusetts",
+        county = "Middlesex",
+        geometry = TRUE,
+        summary_var = "B02001_001")
+```
+
+```{r}
+echo = FALSE
+county |>
+  mutate(Percent =  (estimate / summary_est) * 100) |>
+  mutate(variable = if_else(variable == "B03003_003", "Hispanic", variable)) |> 
+  mutate(variable = if_else(variable == "B02001_002", "White", variable)) |> 
+  mutate(variable = if_else(variable == "B02001_004", "Native", variable)) |>
+  mutate(variable = if_else(variable == "B02001_005", "Asian", variable)) |>
+  ggplot(aes(fill = Percent, color = Percent)) +
+  geom_sf() +
+  facet_wrap(~variable) +
+  scale_fill_viridis_c(direction = -1) +
+  scale_color_viridis_c(direction = -1) +
+  theme_void() +
+  labs(title = "Racial Geography of Middlesex County, MA",
+       subtitle = "The majority of people are white",
+       caption = "Source: American Community Survey 2014-2018")
+```
+
