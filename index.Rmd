@@ -1,0 +1,15 @@
+---
+title: "Mapping in R"
+output: html_document
+date: '2022-06-30'
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(tidycensus)
+library(ggthemes)
+library(tigris)
+```
+
+My name is Shivangi Nadkar and I am completing the Mapping Tutorial in order to create a map to upload to GitHub.
