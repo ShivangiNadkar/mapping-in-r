@@ -1,0 +1,51 @@
+---
+title: "Senior Population"
+output: html_document
+date: '2022-06-30'
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidycensus)
+library(tidyverse)
+library(tigris)
+library(ggthemes)
+options(tigris_use_cache = TRUE)
+```
+
+```{r get data}
+nw_states = c("OR", "WA", "ID")
+
+nw_pums <- get_pums(variables = c("AGEP", "PUMA"),
+         state = nw_states,
+         recode = TRUE,
+         survey = "acs1",
+         year = 2018)
+```
+
+```{r}
+nw_Senior <-nw_pums |> 
+  group_by(ST, PUMA) |> 
+  summarise(total_pop = sum(PWGTP),
+  pct_senior = sum(PWGTP > 64) * 100/ total_pop) |>
+  ungroup() |> 
+nw_pumas <- map(nw_states, tigris::pumas, class="sf", cb=TRUE, year = 2018) |> reduce(rbind)
+```
+
+```{r}
+nw_final <- left_join(nw_pumas, nw_Senior, "STATEFP10" = "ST", 
+          "PUMACE10" = "PUMA")
+```
+
+```{r}
+nw_final |> 
+  ggplot(aes(fill = pct_senior)) +
+    geom_sf() +
+    scale_fill_viridis_b(name = NULL, 
+                         option = "magma",
+                         labels = scales::label_percent(1)) +
+    theme_void() +
+    labs(title = "Percentage of Seniors in Northwestern states", 
+         caption = "Source: American Community Survey 2014-2018")
+```
+

@@ -5,7 +5,7 @@ date: '2022-06-30'
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = FALSE)
 library(tidycensus)
 library(tidyverse)
 library(tigris)
@@ -14,10 +14,12 @@ options(tigris_use_cache = TRUE)
 ```
 
 ```{r}
+echo = FALSE
 continental <- state.name[! state.name %in% c("Alaska", "Hawaii")]
 ```
 
 ```{r}
+echo = FALSE
 races <- get_acs(geography = "tract",
         variables = c(2018, "acs5", "B02001_001", "B02001_008"),
         state = continental,
@@ -27,6 +29,7 @@ races <- get_acs(geography = "tract",
 ```
 
 ```{r}
+echo = FALSE
 #races_map <- races |>
  # mutate(Percent = (estimate / summary_est)*100) |>
   #ggplot(aes(fill = Percent)) +
@@ -38,6 +41,7 @@ races <- get_acs(geography = "tract",
 ```
 
 ```{r}
+echo = FALSE
 read_rds("races_map.rds")
 ```
 
